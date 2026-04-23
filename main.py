@@ -16,8 +16,8 @@ def run_pipeline():
         # 2. Download
         downloader.download_profile_images(entry['meta'], student_dir)
         
-        # 3. Convert
-        image_processor.process_all_in_folder(student_dir)
+        # # 3. Convert
+        # image_processor.process_all_in_folder(student_dir)
         
         # 4. API Update
         api_client.update_cover_via_api(student_dir, entry['meta'])
