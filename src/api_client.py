@@ -1,8 +1,8 @@
 import requests
 from pathlib import Path
 
-def update_cover_via_api(student_dir: Path, meta):
-    cover_path = student_dir / "cover.jpg"
+def update_cover_via_api(student_dir: Path, meta, bg_version="red"):
+    cover_path = student_dir / "raw_cover.jpg"
     
     # Don't call API if the cover image wasn't successfully created
     if not cover_path.exists():
@@ -14,16 +14,27 @@ def update_cover_via_api(student_dir: Path, meta):
         "name": meta.get('name', 'N/A'),
         "major": meta.get('major', 'N/A'),
         "location": meta.get('location', 'N/A'),
-        "handle": meta.get('handle', 'N/A')
+        "handle": meta.get('handle', 'N/A'),
+        "bg_version": bg_version
     }
     
     try:
+        
         with open(cover_path, "rb") as f:
             files = {"profile_file": ("cover.jpg", f, "image/jpeg")}
             response = requests.post(url, params=params, files=files)
             response.raise_for_status()
+
+            if bg_version == "v1":
+                file_name = "cover_red_bg.jpg"
+            elif bg_version == "v2":
+                file_name = "cover_blue_bg.jpg"
+            else:
+                file_name = f"cover_{bg_version}.jpg"
             
-            with open(cover_path, "wb") as f:
+
+            output_path = student_dir / file_name
+            with open(output_path, "wb") as f:
                 f.write(response.content)
             print("    ✅ API Updated cover successfully.")
     except Exception as e:

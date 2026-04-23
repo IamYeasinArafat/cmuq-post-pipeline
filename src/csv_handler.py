@@ -11,7 +11,7 @@ def parse_csv(csv_path: Path):
     with open(csv_path, mode='r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            if row.get('Posted?') == 'Yes':
+            if row.get('Profile Created?') == 'Yes':
                 continue
             
             name = row.get('Full Name', 'Unknown').strip()
@@ -27,7 +27,11 @@ def parse_csv(csv_path: Path):
                 "location": row.get('Country / City', ''),
                 "handle": row.get('Instagram Handle (optional)', ''),
                 "cover_url": row.get('Cover Image (Preferably in the aspect ratio 1:1) (may need to be compressed to <10MB)', '').strip(),
-                "additional_urls": [u.strip() for u in row.get('Additional Images (optional) (may need to be compressed to <10MB)', '').split(',') if u.strip()]
+                "additional_urls": [u.strip() for u in row.get('Additional Images (optional) (may need to be compressed to <10MB)', '').split(',') if u.strip()],
+                "caption": row.get('Caption for Post (optional)', '').strip(),
+                "song": row.get('Song for Post (include artist name for ease) (optional)', '').strip(),
+                "profile_created": row.get('Profile Created?', 'No').strip() == 'Yes',
+                "posted": row.get('Posted?', 'No').strip() == 'Yes'
             }
             
             with open(student_dir / "profile.json", "w") as jf:

@@ -16,7 +16,7 @@ def batch_update():
                     meta = json.load(f)
                 
                 # Re-using the function we wrote earlier
-                update_cover_via_api(student_folder, meta)
+                update_cover_via_api(student_folder, meta, bg_version="v1")
             else:
                 print(f"⚠️ Skipping {student_folder.name}: Missing profile.json or cover.jpg")
 
